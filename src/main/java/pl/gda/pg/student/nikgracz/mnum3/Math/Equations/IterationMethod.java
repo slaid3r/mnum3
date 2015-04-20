@@ -2,6 +2,7 @@ package pl.gda.pg.student.nikgracz.mnum3.Math.Equations;
 
 import pl.gda.pg.student.nikgracz.mnum3.Math.Matrix;
 import pl.gda.pg.student.nikgracz.mnum3.Math.Vector;
+import pl.gda.pg.student.nikgracz.mnum3.Math.impl.RealMatrix;
 
 /**
  * Abstract class for algorithms using iteration method, storing common methods.
@@ -13,7 +14,7 @@ public abstract class IterationMethod {
     }
 
     protected static Matrix transform(Matrix matrix) {
-        Matrix result = new Matrix(matrix.getSizeM(), matrix.getSizeN());
+        Matrix result = new RealMatrix(matrix.getSizeM(), matrix.getSizeN());
 
         for (int i = 0; i < matrix.getSizeM(); i++) {
 

@@ -2,6 +2,7 @@ package pl.gda.pg.student.nikgracz.mnum3.Utils;
 
 
 import pl.gda.pg.student.nikgracz.mnum3.Math.Matrix;
+import pl.gda.pg.student.nikgracz.mnum3.Math.impl.DiagonalMatrix;
 
 /**
  * Utility class for {@code PageRank}.
@@ -40,7 +41,7 @@ public class PageRankUtils {
      */
     public static Matrix prepareMatrixWithLinksCount(Matrix matrix) {
 
-        Matrix diagonal = new Matrix(matrix.getSizeM(), matrix.getSizeN());
+        Matrix diagonal = new DiagonalMatrix(matrix.getSizeM());
 
         for (int i = 0; i < matrix.getSizeM(); i++) {
             double connections = 0;

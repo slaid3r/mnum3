@@ -3,6 +3,8 @@ package pl.gda.pg.student.nikgracz.mnum3.Math.Equations;
 import org.apache.commons.lang3.Validate;
 import pl.gda.pg.student.nikgracz.mnum3.Math.Matrix;
 import pl.gda.pg.student.nikgracz.mnum3.Math.Vector;
+import pl.gda.pg.student.nikgracz.mnum3.Math.impl.DiagonalMatrix;
+import pl.gda.pg.student.nikgracz.mnum3.Math.impl.RealMatrix;
 import pl.gda.pg.student.nikgracz.mnum3.Utils.MatrixUtils;
 import pl.gda.pg.student.nikgracz.mnum3.Utils.VectorUtils;
 
@@ -20,7 +22,7 @@ public class GaussSeidel extends IterationMethod {
      * @param epsilon  the accuracy epsilon
      * @return  the vector of solutions
      */
-    public static Result resolve(Matrix matrix, Vector vector, Vector X0, double epsilon) {
+    public static Result resolve(RealMatrix matrix, Vector vector, Vector X0, double epsilon) {
 
         long start = System.nanoTime();
 
@@ -50,11 +52,11 @@ public class GaussSeidel extends IterationMethod {
     }
 
     private static double calculateP(Matrix matrix) {
-        Matrix MPlusD = Matrix.lowerTriangularMatrix(matrix);
-        Matrix D = Matrix.diagonalMatrix(matrix);
-        Matrix N = MatrixUtils.subtractMatrices(Matrix.upperTriangularMatrix(matrix), D);
+        Matrix MPlusD = RealMatrix.lowerTriangularMatrix(matrix);
+        Matrix D = new DiagonalMatrix(matrix);
+        Matrix N = MatrixUtils.subtractMatrices(RealMatrix.upperTriangularMatrix(matrix), D);
 
-        Matrix inverted = MatrixUtils.inverseMatrix(MPlusD);
+        Matrix inverted = MPlusD.inverse();
         inverted.multiplyBy(-1);
 
         Matrix result = MatrixUtils.multiplyMatrices(inverted, N);

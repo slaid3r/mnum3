@@ -3,10 +3,11 @@ package pl.gda.pg.student.nikgracz.mnum3.Utils;
 import javafx.util.Pair;
 import org.apache.commons.lang3.Validate;
 import pl.gda.pg.student.nikgracz.mnum3.Math.Matrix;
+import pl.gda.pg.student.nikgracz.mnum3.Math.impl.RealMatrix;
 import pl.gda.pg.student.nikgracz.mnum3.SNAP.SNAPGraph;
 
 /**
- * Utility class for {@code Matrix}.
+ * Utility class for {@code RealMatrix}.
  */
 public class MatrixUtils {
 
@@ -18,7 +19,7 @@ public class MatrixUtils {
      */
     public static Matrix convertToMatrix(SNAPGraph graph) {
 
-        Matrix matrix = new Matrix(graph.getNodes(), graph.getNodes());
+        RealMatrix matrix = new RealMatrix(graph.getNodes(), graph.getNodes());
 
         for (Pair<Integer, Integer> pair : graph.getGraph()) {
             matrix.set(pair.getValue(), pair.getKey(), 1);
@@ -38,7 +39,7 @@ public class MatrixUtils {
 
         Validate.isTrue(A.getSizeN() == B.getSizeM(), "The number of columns in A must equal the number of rows in B!");
 
-        Matrix result = new Matrix(A.getSizeM(), B.getSizeN());
+        Matrix result = new RealMatrix(A.getSizeM(), B.getSizeN());
 
         for (int i = 0; i < A.getSizeM(); i++) {
             for (int j = 0; j < B.getSizeN(); j++) {
@@ -67,7 +68,7 @@ public class MatrixUtils {
 
         Validate.isTrue(A.getSizeM() == B.getSizeM() && A.getSizeN() == B.getSizeN(), "Matrices must have the same size!");
 
-        Matrix result = new Matrix(A.getSizeM(), A.getSizeN());
+        RealMatrix result = new RealMatrix(A.getSizeM(), A.getSizeN());
 
         for (int i = 0; i < A.getSizeM(); i++) {
             for (int j = 0; j < A.getSizeN(); j++) {
@@ -76,50 +77,4 @@ public class MatrixUtils {
         }
         return result;
     }
-
-    /**
-     * Inverses the given matrix using Gauss elimination method.
-     *
-     * @param matrix  the matrix to be inverted
-     * @return  the inverted matrix
-     */
-    public static Matrix inverseMatrix(Matrix matrix) {
-
-        Validate.isTrue(matrix.getSizeN() == matrix.getSizeM(), "Matrix must be square!");
-
-        Matrix inverted = Matrix.identityMatrix(matrix.getSizeN());
-
-        for (int i = 0; i < matrix.getSizeN(); i++) {
-
-            double aii = matrix.get(i, i);
-
-            for (int j = 0; j < matrix.getSizeN(); j++) {
-                matrix.set(i, j, matrix.get(i, j) / aii);
-                inverted.set(i, j, inverted.get(i, j) / aii);
-            }
-
-            for (int j = 0; j < i; j++) {
-
-                double aij = matrix.get(j, i);
-
-                for (int k = 0; k < matrix.getSizeN(); k++) {
-                    matrix.set(j, k, matrix.get(j, k) - matrix.get(i, k) * aij);
-                    inverted.set(j, k, inverted.get(j, k) - inverted.get(i, k) * aij);
-                }
-            }
-
-            for (int j = i + 1; j < matrix.getSizeN(); j++) {
-
-                double aij = matrix.get(j, i);
-
-                for (int k = 0; k < matrix.getSizeN(); k++) {
-                    matrix.set(j, k, matrix.get(j, k) - matrix.get(i, k) * aij);
-                    inverted.set(j, k, inverted.get(j, k) - inverted.get(i, k) * aij);
-                }
-            }
-        }
-
-        return inverted;
-    }
-
 }

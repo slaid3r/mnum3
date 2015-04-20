@@ -5,6 +5,7 @@ import pl.gda.pg.student.nikgracz.mnum3.Math.Equations.Jacobi;
 import pl.gda.pg.student.nikgracz.mnum3.Math.Equations.Result;
 import pl.gda.pg.student.nikgracz.mnum3.Math.Matrix;
 import pl.gda.pg.student.nikgracz.mnum3.Math.Vector;
+import pl.gda.pg.student.nikgracz.mnum3.Math.impl.RealMatrix;
 import pl.gda.pg.student.nikgracz.mnum3.SNAP.SNAPGraph;
 import pl.gda.pg.student.nikgracz.mnum3.Utils.MatrixUtils;
 import pl.gda.pg.student.nikgracz.mnum3.Utils.PageRankUtils;
@@ -33,12 +34,21 @@ public class PageRank {
 
         long start = System.nanoTime();
 
+
+        System.out.println("Creating adjacency matrix.");
         Matrix adjacencyMatrix = MatrixUtils.convertToMatrix(graph);
+
+        System.out.println("Handling pages without links.");
         PageRankUtils.handlePagesWithoutLinks(adjacencyMatrix);
+        System.out.println("Preparing matrix with links counts.");
         Matrix diagonal = PageRankUtils.prepareMatrixWithLinksCount(adjacencyMatrix);
+
+        System.out.println("Multiplying matrix by scalar.");
         adjacencyMatrix.multiplyBy(d);
-        Matrix multiplied = MatrixUtils.multiplyMatrices(adjacencyMatrix, diagonal);
-        Matrix equationsSystem = MatrixUtils.subtractMatrices(Matrix.identityMatrix(graph.getNodes()), multiplied);
+        System.out.println("Multiplying matrices.");
+        Matrix multiplied = adjacencyMatrix.multiplyBy(diagonal);
+        System.out.println("Subtracting matrices.");
+        Matrix equationsSystem = MatrixUtils.subtractMatrices(RealMatrix.identityMatrix(graph.getNodes()), multiplied);
 
         Result result = Jacobi.resolve(equationsSystem, prepareVector(), new Vector(new double[graph.getNodes()]), 0.00001);
 
