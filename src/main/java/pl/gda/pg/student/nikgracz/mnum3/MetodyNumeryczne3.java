@@ -10,6 +10,7 @@ import pl.gda.pg.student.nikgracz.mnum3.Search.PageRank;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
@@ -29,6 +30,8 @@ public class MetodyNumeryczne3 {
 
         if (args.length > 0) {
 
+            System.out.println("Application started with argument. Calculating PageRank.");
+
             File file = new File(args[0]);
 
             PageRank page = new PageRank(new SNAPGraph(file), 0.85);
@@ -38,8 +41,12 @@ public class MetodyNumeryczne3 {
             result.print();
 
         } else {
-            Scanner scanner = new Scanner(System.in);
+
+            System.out.println("Application started without argument. Solving matrix.");
+
+            Scanner scanner = new Scanner(System.in).useLocale(Locale.US);
             int m = scanner.nextInt();
+            double epsilon = scanner.nextDouble();
 
             Matrix matrix = new Matrix(m, m);
             Vector vector = new Vector(m);
@@ -51,8 +58,14 @@ public class MetodyNumeryczne3 {
                 vector.set(i, scanner.nextDouble());
             }
 
-            Result resultGaussSeidel = GaussSeidel.resolve(matrix, vector, new Vector(new double[]{0, 0, 0, 0}), 0.00001);
-            Result resultJacobi = Jacobi.resolve(matrix, vector, new Vector(new double[]{0, 0, 0, 0}), 0.00001);
+            Vector X0 = new Vector(m);
+
+            for (int i = 0; i < m; i++) {
+                X0.set(i, scanner.nextDouble());
+            }
+
+            Result resultGaussSeidel = GaussSeidel.resolve(matrix, vector, X0, epsilon);
+            Result resultJacobi = Jacobi.resolve(matrix, vector, X0, epsilon);
 
             System.out.println("Results for Gauss-Seidel");
             resultGaussSeidel.print();

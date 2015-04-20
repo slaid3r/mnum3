@@ -1,8 +1,0 @@
-# Some comment line
-# Some comment line
-0	1
-0	3
-1	0
-2	0
-2	1
-4	2
